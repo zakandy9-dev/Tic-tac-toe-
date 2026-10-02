@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,326 +6,109 @@
     <title>✕ Tic-Tac-Toe Online ⭕</title>
     <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-        }
-
+        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; }
         body {
-            min-height: 100vh;
-            margin: 0;
+            min-height: 100vh; margin: 0;
             background: linear-gradient(145deg, #1e2b3c 0%, #0f1a26 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
+            display: flex; align-items: center; justify-content: center; padding: 16px;
         }
-
         .game-container {
-            background: #2a3a4b;
-            border-radius: 48px;
-            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.05);
-            padding: 30px 30px 40px;
-            max-width: 620px;
-            width: 100%;
+            background: #2a3a4b; border-radius: 48px;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.05);
+            padding: 30px 30px 40px; max-width: 620px; width: 100%;
         }
-
         h1 {
-            text-align: center;
-            margin: 0 0 10px;
-            font-size: 2.3rem;
-            font-weight: 500;
-            letter-spacing: 5px;
-            color: #eef4ff;
+            text-align: center; margin: 0 0 10px; font-size: 2.3rem;
+            font-weight: 500; letter-spacing: 5px; color: #eef4ff;
             text-shadow: 0 4px 10px #0a1118, 0 0 8px #5f7f9f;
-            word-break: keep-all;
         }
-
         .room-panel {
-            background: #1e2d3b;
-            border-radius: 30px;
-            padding: 18px 20px;
-            margin-bottom: 20px;
-            box-shadow: inset 0 4px 6px #0b1219, 0 6px 10px #0f1a24;
+            background: #1e2d3b; border-radius: 30px; padding: 18px 20px;
+            margin-bottom: 20px; box-shadow: inset 0 4px 6px #0b1219, 0 6px 10px #0f1a24;
         }
-
-        .room-row {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
-
-        .room-row:last-child {
-            margin-bottom: 0;
-        }
-
-        .room-label {
-            color: #9db4cc;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            min-width: 100px;
-        }
-
+        .room-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+        .room-row:last-child { margin-bottom: 0; }
+        .room-label { color: #9db4cc; font-size: 0.9rem; font-weight: 600; letter-spacing: 1px; min-width: 100px; }
         .room-input {
-            flex: 1;
-            min-width: 140px;
-            background: #0f1a26;
-            border: 1px solid #3a5068;
-            border-radius: 40px;
-            padding: 12px 18px;
-            color: #eef4ff;
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            outline: none;
-            transition: 0.2s;
-            box-shadow: inset 0 3px 6px #060c11;
+            flex: 1; min-width: 140px; background: #0f1a26; border: 1px solid #3a5068;
+            border-radius: 40px; padding: 12px 18px; color: #eef4ff;
+            font-size: 1rem; font-weight: 600; letter-spacing: 2px;
+            outline: none; transition: 0.2s; box-shadow: inset 0 3px 6px #060c11;
         }
-
-        .room-input:focus {
-            border-color: #7fe0b0;
-            box-shadow: inset 0 3px 6px #060c11, 0 0 0 2px rgba(127, 224, 176, 0.3);
-        }
-
-        .room-input::placeholder {
-            color: #4d637a;
-            letter-spacing: 1px;
-            font-weight: 400;
-        }
-
+        .room-input:focus { border-color: #7fe0b0; box-shadow: inset 0 3px 6px #060c11, 0 0 0 2px rgba(127,224,176,0.3); }
+        .room-input::placeholder { color: #4d637a; letter-spacing: 1px; font-weight: 400; }
         .small-btn {
-            background: #1f3140;
-            border: none;
-            border-radius: 40px;
-            padding: 12px 22px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #dfeaf5;
+            background: #1f3140; border: none; border-radius: 40px; padding: 12px 22px;
+            font-size: 0.95rem; font-weight: 700; letter-spacing: 1px; color: #dfeaf5;
             box-shadow: 0 6px 10px -4px #0b1219, inset 0 -2px 0 #2d4055, inset 0 2px 6px #53728f;
-            cursor: pointer;
-            transition: 0.12s;
-            white-space: nowrap;
+            cursor: pointer; transition: 0.12s; white-space: nowrap;
         }
-
-        .small-btn:hover:not(:disabled) {
-            background: #284153;
-            color: #ffffff;
-        }
-
-        .small-btn:active:not(:disabled) {
-            transform: translateY(2px);
-            box-shadow: 0 2px 4px -2px #0b1219, inset 0 -1px 0 #2d4055, inset 0 2px 6px #53728f;
-        }
-
-        .small-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
+        .small-btn:hover:not(:disabled) { background: #284153; color: #ffffff; }
+        .small-btn:active:not(:disabled) { transform: translateY(2px); }
+        .small-btn:disabled { opacity: 0.4; cursor: not-allowed; }
         .connection-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 16px;
-            border-radius: 30px;
-            background: #17222e;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #b8cde0;
-            letter-spacing: 0.5px;
+            display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+            border-radius: 30px; background: #17222e; font-size: 0.9rem;
+            font-weight: 600; color: #b8cde0; letter-spacing: 0.5px;
         }
-
         .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #ff6b6b;
-            box-shadow: 0 0 8px #ff6b6b;
-            flex-shrink: 0;
-            transition: 0.3s;
+            width: 12px; height: 12px; border-radius: 50%;
+            background: #ff6b6b; box-shadow: 0 0 8px #ff6b6b;
+            flex-shrink: 0; transition: 0.3s;
         }
-
-        .dot.connected {
-            background: #7fe0b0;
-            box-shadow: 0 0 10px #7fe0b0;
-        }
-
-        .dot.waiting {
-            background: #ffc107;
-            box-shadow: 0 0 10px #ffc107;
-            animation: pulse 1.2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
+        .dot.connected { background: #7fe0b0; box-shadow: 0 0 10px #7fe0b0; }
+        .dot.waiting { background: #ffc107; box-shadow: 0 0 10px #ffc107; animation: pulse 1.2s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
         .status {
-            text-align: center;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #d9e6f2;
-            background: #1e2d3b;
-            padding: 10px 20px;
-            border-radius: 60px;
-            margin: 0 0 22px;
+            text-align: center; font-size: 1.4rem; font-weight: 600; color: #d9e6f2;
+            background: #1e2d3b; padding: 10px 20px; border-radius: 60px; margin: 0 0 22px;
             box-shadow: inset 0 4px 6px #0b1219, 0 6px 10px #0f1a24;
-            transition: 0.2s;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.5px; min-height: 60px; display: flex; align-items: center; justify-content: center;
         }
-
-        .board {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            background: transparent;
-            margin-bottom: 25px;
-        }
-
+        .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 25px; }
         .cell {
-            aspect-ratio: 1 / 1;
-            background: #1c2b39;
-            border-radius: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
-            font-weight: 700;
-            color: #f0f7ff;
-            text-shadow: 0 8px 12px #0b1117;
+            aspect-ratio: 1/1; background: #1c2b39; border-radius: 28px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 5rem; font-weight: 700; color: #f0f7ff; text-shadow: 0 8px 12px #0b1117;
             box-shadow: 0 12px 15px -5px #0e1a24, inset 0 -3px 0 #2f4053, inset 0 3px 8px #3a5068;
-            cursor: pointer;
-            transition: 0.15s ease;
-            user-select: none;
-            padding: 0 0 10px 0;
-            line-height: 1;
+            cursor: pointer; transition: 0.15s ease; user-select: none; padding: 0 0 10px 0; line-height: 1;
         }
-
-        .cell.disabled {
-            cursor: not-allowed;
-        }
-
-        .cell:not(.disabled):hover {
-            background: #233646;
-            box-shadow: 0 12px 15px -5px #0e1a24, inset 0 -3px 0 #3e5670, inset 0 3px 8px #4a6887;
-        }
-
-        .cell:not(.disabled):active {
-            transform: scale(0.96);
-        }
-
-        .cell.win {
-            background: #2e5f4e;
-            box-shadow: 0 0 0 3px #7fe0b0, 0 12px 15px -5px #0e1a24, inset 0 -3px 0 #3d7a63;
-            color: #d6ffe6;
-            text-shadow: 0 0 12px #9effcf;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
+        .cell.disabled { cursor: not-allowed; }
+        .cell:not(.disabled):hover { background: #233646; }
+        .cell:not(.disabled):active { transform: scale(0.96); }
+        .cell.win { background: #2e5f4e; box-shadow: 0 0 0 3px #7fe0b0, 0 12px 15px -5px #0e1a24; color: #d6ffe6; }
+        .controls { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
         .btn {
-            background: #1f3140;
-            border: none;
-            border-radius: 50px;
-            padding: 15px 32px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            color: #dfeaf5;
+            background: #1f3140; border: none; border-radius: 50px; padding: 15px 32px;
+            font-size: 1.1rem; font-weight: 600; letter-spacing: 1px; color: #dfeaf5;
             box-shadow: 0 10px 12px -5px #0b1219, inset 0 -3px 0 #2d4055, inset 0 2px 8px #53728f;
-            cursor: pointer;
-            transition: 0.12s;
-            flex: 0 1 auto;
+            cursor: pointer; transition: 0.12s;
         }
-
-        .btn:hover:not(:disabled) {
-            background: #284153;
-            color: #ffffff;
-        }
-
-        .btn:active:not(:disabled) {
-            transform: translateY(3px);
-            box-shadow: 0 4px 6px -3px #0b1219, inset 0 -1px 0 #2d4055, inset 0 2px 8px #53728f;
-        }
-
-        .btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
+        .btn:hover:not(:disabled) { background: #284153; color: #ffffff; }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
         .marker-badge {
-            display: inline-block;
-            padding: 3px 14px;
-            border-radius: 30px;
-            font-weight: 800;
-            font-size: 0.95rem;
-            letter-spacing: 1px;
-            margin-left: 8px;
+            display: inline-block; padding: 3px 14px; border-radius: 30px;
+            font-weight: 800; font-size: 0.95rem; letter-spacing: 1px; margin-left: 8px;
         }
-
-        .badge-x {
-            background: #2b5a8c;
-            color: #cce6ff;
-            box-shadow: 0 0 10px #3b7fd4;
+        .badge-x { background: #2b5a8c; color: #cce6ff; box-shadow: 0 0 10px #3b7fd4; }
+        .badge-o { background: #7a3e5c; color: #ffd9ec; box-shadow: 0 0 10px #d86ba0; }
+        .footer { text-align: center; margin-top: 20px; font-size: 0.85rem; color: #6c839b; letter-spacing: 1px; }
+        .log-panel {
+            background: #0f1a26; border-radius: 12px; padding: 10px 14px;
+            margin-top: 12px; font-family: monospace; font-size: 0.75rem;
+            color: #7a99b8; max-height: 100px; overflow-y: auto;
+            border: 1px solid #1f3140;
         }
-
-        .badge-o {
-            background: #7a3e5c;
-            color: #ffd9ec;
-            box-shadow: 0 0 10px #d86ba0;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.85rem;
-            color: #6c839b;
-            letter-spacing: 1px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
+        .log-panel div { margin-bottom: 2px; }
+        .log-err { color: #ff8a8a; }
+        .log-ok { color: #7fe0b0; }
+        .log-warn { color: #ffc107; }
         @media (max-width: 520px) {
-            .game-container {
-                padding: 20px 18px 30px;
-                border-radius: 36px;
-            }
-            h1 {
-                font-size: 1.7rem;
-                letter-spacing: 3px;
-            }
-            .status {
-                font-size: 1.2rem;
-                padding: 8px 16px;
-            }
-            .cell {
-                font-size: 3.8rem;
-                border-radius: 22px;
-            }
-            .btn {
-                padding: 12px 22px;
-                font-size: 1rem;
-            }
-            .small-btn {
-                padding: 10px 16px;
-                font-size: 0.85rem;
-            }
-            .room-label {
-                min-width: 80px;
-                font-size: 0.8rem;
-            }
+            .game-container { padding: 20px 18px 30px; border-radius: 36px; }
+            h1 { font-size: 1.7rem; letter-spacing: 3px; }
+            .status { font-size: 1.1rem; }
+            .cell { font-size: 3.8rem; border-radius: 22px; }
+            .room-label { min-width: 80px; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -333,293 +116,353 @@
 <div class="game-container">
     <h1>✕ TIC–TAC–TOE ⭕</h1>
 
-    <!-- Room / Connection panel -->
     <div class="room-panel">
         <div class="room-row">
             <span class="room-label">YOUR ID</span>
             <input type="text" class="room-input" id="myIdInput" placeholder="Generating..." readonly>
-            <button class="small-btn" id="copyIdBtn">📋 Copy</button>
+            <button class="small-btn" id="copyIdBtn" disabled>📋 Copy</button>
         </div>
         <div class="room-row">
             <span class="room-label">PARTNER ID</span>
             <input type="text" class="room-input" id="partnerIdInput" placeholder="Paste friend's ID here">
-            <button class="small-btn" id="connectBtn">🔗 Connect</button>
+            <button class="small-btn" id="connectBtn" disabled>🔗 Connect</button>
         </div>
         <div class="room-row" style="justify-content: space-between;">
             <div class="connection-status">
                 <span class="dot" id="statusDot"></span>
-                <span id="connectionText">Not connected</span>
+                <span id="connectionText">Starting up...</span>
             </div>
-            <button class="small-btn" id="disconnectBtn" disabled>✖ Disconnect</button>
+            <div style="display: flex; gap: 8px;">
+                <button class="small-btn" id="retryBtn">🔄 Retry</button>
+                <button class="small-btn" id="disconnectBtn" disabled>✖ Disconnect</button>
+            </div>
         </div>
     </div>
 
-    <div class="status" id="statusMessage">Connecting to server...</div>
+    <div class="status" id="statusMessage">Initializing...</div>
 
-    <div class="board" id="board">
-        <!-- 9 cells generated by JS -->
-    </div>
+    <div class="board" id="board"></div>
 
     <div class="controls">
         <button class="btn" id="resetButton" disabled>🔄 New Game</button>
     </div>
 
     <div class="footer" id="roleFooter">✕ vs ⭕ — online duel</div>
+
+    <!-- Debug log panel (remove after fixing) -->
+    <div class="log-panel" id="logPanel"></div>
 </div>
 
 <script>
-    (function() {
-        // ---------- GAME CONSTANTS ----------
-        const WINNING_COMBOS = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],   // rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],   // cols
-            [0, 4, 8], [2, 4, 6]               // diags
-        ];
-        const PEER_CONFIG = {
-            debug: 2,
-            config: {
-                iceServers: [
-                    { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'stun:stun1.l.google.com:19302' },
-                    { urls: 'stun:global.stun.twilio.com:3478' }
-                ]
-            }
-        };
+(function() {
+    // ============================================================
+    // CONFIG — multiple fallback PeerJS servers
+    // ============================================================
+    const PEER_SERVERS = [
+        // Official PeerJS cloud (most common)
+        { host: '0.peerjs.com', port: 443, secure: true, path: '/', key: 'peerjs' },
+        // Community run server
+        { host: 'peerjs.92k.de', port: 443, secure: true, path: '/', key: 'peerjs' },
+    ];
 
-        // ---------- GAME STATE ----------
-        let board = Array(9).fill(null);
-        let currentPlayer = 'X';
-        let gameActive = false;
-        let winner = null;
-        let myMarker = null;          // 'X' or 'O' for this player
-        let isHost = false;           // host is X, guest is O
+    const CONNECT_TIMEOUT = 12000; // 12 seconds
 
-        // ---------- PEER STATE ----------
-        let peer = null;
-        let connection = null;
-        let myPeerId = null;
-        let isConnected = false;
-        let connecting = false;
+    const WINNING_COMBOS = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+    ];
 
-        // ---------- DOM REFERENCES ----------
-        const boardEl = document.getElementById('board');
-        const statusEl = document.getElementById('statusMessage');
-        const resetBtn = document.getElementById('resetButton');
-        const myIdInput = document.getElementById('myIdInput');
-        const partnerIdInput = document.getElementById('partnerIdInput');
-        const copyIdBtn = document.getElementById('copyIdBtn');
-        const connectBtn = document.getElementById('connectBtn');
-        const disconnectBtn = document.getElementById('disconnectBtn');
-        const statusDot = document.getElementById('statusDot');
-        const connectionText = document.getElementById('connectionText');
-        const roleFooter = document.getElementById('roleFooter');
+    // ============================================================
+    // STATE
+    // ============================================================
+    let board = Array(9).fill(null);
+    let currentPlayer = 'X';
+    let gameActive = false;
+    let winner = null;
+    let myMarker = null;
+    let isHost = false;
 
-        // ---------- UI HELPERS ----------
-        function setConnectionUI(state, text) {
-            statusDot.className = 'dot';
-            if (state === 'connected') {
-                statusDot.classList.add('connected');
-                connectionText.textContent = text || 'Connected';
-                disconnectBtn.disabled = false;
-                connectBtn.disabled = true;
-                partnerIdInput.disabled = true;
-            } else if (state === 'waiting') {
-                statusDot.classList.add('waiting');
-                connectionText.textContent = text || 'Waiting...';
-                disconnectBtn.disabled = false;
-                connectBtn.disabled = true;
-                partnerIdInput.disabled = true;
-            } else if (state === 'connecting') {
-                statusDot.classList.add('waiting');
-                connectionText.textContent = text || 'Connecting...';
-                disconnectBtn.disabled = true;
-                connectBtn.disabled = true;
-                partnerIdInput.disabled = true;
+    let peer = null;
+    let connection = null;
+    let myPeerId = null;
+    let isConnected = false;
+    let connecting = false;
+    let serverIndex = 0;
+    let connectTimeout = null;
+
+    // ============================================================
+    // DOM
+    // ============================================================
+    const boardEl = document.getElementById('board');
+    const statusEl = document.getElementById('statusMessage');
+    const resetBtn = document.getElementById('resetButton');
+    const myIdInput = document.getElementById('myIdInput');
+    const partnerIdInput = document.getElementById('partnerIdInput');
+    const copyIdBtn = document.getElementById('copyIdBtn');
+    const connectBtn = document.getElementById('connectBtn');
+    const disconnectBtn = document.getElementById('disconnectBtn');
+    const retryBtn = document.getElementById('retryBtn');
+    const statusDot = document.getElementById('statusDot');
+    const connectionText = document.getElementById('connectionText');
+    const roleFooter = document.getElementById('roleFooter');
+    const logPanel = document.getElementById('logPanel');
+
+    // ============================================================
+    // LOGGING
+    // ============================================================
+    function log(msg, type = 'info') {
+        console.log('[TicTacToe]', msg);
+        const line = document.createElement('div');
+        line.className = type === 'error' ? 'log-err' : type === 'ok' ? 'log-ok' : type === 'warn' ? 'log-warn' : '';
+        const time = new Date().toLocaleTimeString();
+        line.textContent = `[${time}] ${msg}`;
+        logPanel.appendChild(line);
+        logPanel.scrollTop = logPanel.scrollHeight;
+        // keep only last 30 messages
+        while (logPanel.children.length > 30) logPanel.removeChild(logPanel.firstChild);
+    }
+
+    // ============================================================
+    // UI HELPERS
+    // ============================================================
+    function setConnectionUI(state, text) {
+        statusDot.className = 'dot';
+        if (state === 'connected') {
+            statusDot.classList.add('connected');
+            disconnectBtn.disabled = false;
+            connectBtn.disabled = true;
+            partnerIdInput.disabled = true;
+            copyIdBtn.disabled = false;
+        } else if (state === 'waiting') {
+            statusDot.classList.add('waiting');
+            disconnectBtn.disabled = false;
+            connectBtn.disabled = true;
+            partnerIdInput.disabled = true;
+            copyIdBtn.disabled = false;
+        } else if (state === 'connecting') {
+            statusDot.classList.add('waiting');
+            disconnectBtn.disabled = true;
+            connectBtn.disabled = true;
+            partnerIdInput.disabled = true;
+        } else if (state === 'ready') {
+            disconnectBtn.disabled = true;
+            connectBtn.disabled = false;
+            partnerIdInput.disabled = false;
+            copyIdBtn.disabled = false;
+        } else {
+            disconnectBtn.disabled = true;
+            connectBtn.disabled = true;
+            partnerIdInput.disabled = false;
+            copyIdBtn.disabled = true;
+        }
+        connectionText.textContent = text || 'Not connected';
+    }
+
+    function updateStatusMessage() {
+        if (!isConnected) {
+            statusEl.textContent = 'Waiting for connection...';
+            return;
+        }
+        if (winner === 'draw') {
+            statusEl.textContent = `🤝 It's a draw!`;
+        } else if (winner) {
+            const youWon = winner === myMarker;
+            statusEl.textContent = youWon ? `🎉 You win!` : `😢 Opponent wins!`;
+        } else {
+            const turnText = currentPlayer === myMarker ? 'Your turn' : "Opponent's turn";
+            statusEl.textContent = `${turnText} (${currentPlayer})`;
+        }
+    }
+
+    function updateRoleFooter() {
+        if (myMarker) {
+            const badgeClass = myMarker === 'X' ? 'badge-x' : 'badge-o';
+            roleFooter.innerHTML = `You are <span class="marker-badge ${badgeClass}">${myMarker}</span>`;
+        } else {
+            roleFooter.textContent = '✕ vs ⭕ — online duel';
+        }
+    }
+
+    function setBoardEnabled(enabled) {
+        document.querySelectorAll('.cell').forEach(cell => {
+            if (enabled && !cell.dataset.value && gameActive && currentPlayer === myMarker) {
+                cell.classList.remove('disabled');
             } else {
-                connectionText.textContent = text || 'Not connected';
-                disconnectBtn.disabled = true;
-                connectBtn.disabled = false;
-                partnerIdInput.disabled = false;
+                cell.classList.add('disabled');
+            }
+        });
+    }
+
+    // ============================================================
+    // BOARD
+    // ============================================================
+    function createBoardUI() {
+        boardEl.innerHTML = '';
+        for (let i = 0; i < 9; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell disabled';
+            cell.dataset.index = i;
+            cell.dataset.value = '';
+            cell.addEventListener('click', handleCellClick);
+            boardEl.appendChild(cell);
+        }
+    }
+
+    function updateBoardUI() {
+        document.querySelectorAll('.cell').forEach((cell, idx) => {
+            cell.textContent = board[idx] || '';
+            cell.dataset.value = board[idx] || '';
+            cell.classList.remove('win');
+        });
+    }
+
+    function highlightWinningCells(combo) {
+        const cells = document.querySelectorAll('.cell');
+        combo.forEach(i => cells[i].classList.add('win'));
+    }
+
+    // ============================================================
+    // GAME LOGIC
+    // ============================================================
+    function checkWinner() {
+        for (let combo of WINNING_COMBOS) {
+            const [a,b,c] = combo;
+            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                return { winner: board[a], combo };
             }
         }
+        if (board.every(cell => cell !== null)) return { winner: 'draw', combo: null };
+        return { winner: null, combo: null };
+    }
 
-        function updateStatusMessage() {
-            if (!isConnected) {
-                statusEl.textContent = 'Waiting for connection...';
-                return;
-            }
-            if (winner === 'draw') {
-                statusEl.textContent = `🤝 It's a draw!`;
-            } else if (winner) {
-                const youWon = winner === myMarker;
-                statusEl.textContent = youWon ? `🎉 You win!` : `😢 Opponent wins!`;
+    function applyMove(index, mark) {
+        if (board[index] !== null) return false;
+        board[index] = mark;
+        const cells = document.querySelectorAll('.cell');
+        cells[index].textContent = mark;
+        cells[index].dataset.value = mark;
+
+        const result = checkWinner();
+        if (result.winner) {
+            gameActive = false;
+            if (result.winner === 'draw') {
+                winner = 'draw';
             } else {
-                const turnText = currentPlayer === myMarker ? 'Your turn' : "Opponent's turn";
-                statusEl.textContent = `${turnText} (${currentPlayer})`;
+                winner = result.winner;
+                highlightWinningCells(result.combo);
             }
-        }
-
-        function updateRoleFooter() {
-            if (myMarker) {
-                const badgeClass = myMarker === 'X' ? 'badge-x' : 'badge-o';
-                roleFooter.innerHTML = `You are <span class="marker-badge ${badgeClass}">${myMarker}</span>`;
-            } else {
-                roleFooter.textContent = '✕ vs ⭕ — online duel';
-            }
-        }
-
-        function setBoardEnabled(enabled) {
-            document.querySelectorAll('.cell').forEach(cell => {
-                if (enabled && !cell.dataset.value && gameActive && currentPlayer === myMarker) {
-                    cell.classList.remove('disabled');
-                } else {
-                    cell.classList.add('disabled');
-                }
-            });
-        }
-
-        // ---------- BOARD UI ----------
-        function createBoardUI() {
-            boardEl.innerHTML = '';
-            for (let i = 0; i < 9; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'cell disabled';
-                cell.dataset.index = i;
-                cell.dataset.value = '';
-                cell.textContent = '';
-                cell.addEventListener('click', handleCellClick);
-                boardEl.appendChild(cell);
-            }
-        }
-
-        function updateBoardUI() {
-            const cells = document.querySelectorAll('.cell');
-            cells.forEach((cell, idx) => {
-                const mark = board[idx];
-                cell.textContent = mark || '';
-                cell.dataset.value = mark || '';
-                cell.classList.remove('win');
-            });
-        }
-
-        function highlightWinningCells(combo) {
-            const cells = document.querySelectorAll('.cell');
-            combo.forEach(index => cells[index].classList.add('win'));
-        }
-
-        // ---------- GAME LOGIC ----------
-        function checkWinner() {
-            for (let combo of WINNING_COMBOS) {
-                const [a, b, c] = combo;
-                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                    return { winner: board[a], combo };
-                }
-            }
-            if (board.every(cell => cell !== null)) {
-                return { winner: 'draw', combo: null };
-            }
-            return { winner: null, combo: null };
-        }
-
-        function applyMove(index, mark) {
-            if (board[index] !== null) return false;
-            board[index] = mark;
-            const cells = document.querySelectorAll('.cell');
-            cells[index].textContent = mark;
-            cells[index].dataset.value = mark;
-
-            const result = checkWinner();
-            if (result.winner) {
-                gameActive = false;
-                if (result.winner === 'draw') {
-                    winner = 'draw';
-                } else {
-                    winner = result.winner;
-                    highlightWinningCells(result.combo);
-                }
-                updateStatusMessage();
-                setBoardEnabled(false);
-                resetBtn.disabled = false;
-                return true;
-            }
-
-            // switch turn
-            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
             updateStatusMessage();
-            setBoardEnabled(true);
-            resetBtn.disabled = false;
+            setBoardEnabled(false);
             return true;
         }
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        updateStatusMessage();
+        setBoardEnabled(true);
+        return true;
+    }
 
-        function resetGame(notifyPeer = true) {
-            board = Array(9).fill(null);
-            currentPlayer = 'X';
-            gameActive = true;
-            winner = null;
-
-            updateBoardUI();
-            setBoardEnabled(true);
-            resetBtn.disabled = false;
-            updateStatusMessage();
-
-            // When starting a new game, the host (X) always plays first.
-            if (notifyPeer && connection && connection.open) {
-                connection.send({ type: 'reset' });
-            }
+    function resetGame(notifyPeer = true) {
+        board = Array(9).fill(null);
+        currentPlayer = 'X';
+        gameActive = true;
+        winner = null;
+        updateBoardUI();
+        setBoardEnabled(true);
+        resetBtn.disabled = false;
+        updateStatusMessage();
+        if (notifyPeer && connection && connection.open) {
+            connection.send({ type: 'reset' });
         }
+    }
 
-        // ---------- CELL CLICK ----------
-        function handleCellClick(e) {
-            if (!isConnected) return;
-            if (!gameActive) return;
-            if (winner) return;
-            if (currentPlayer !== myMarker) return;
-
-            const cell = e.currentTarget;
-            const index = parseInt(cell.dataset.index, 10);
-            if (board[index] !== null) return;
-
-            // apply locally
-            if (!applyMove(index, myMarker)) return;
-
-            // send to peer
-            if (connection && connection.open) {
-                connection.send({ type: 'move', index, mark: myMarker });
-            }
+    function handleCellClick(e) {
+        if (!isConnected || !gameActive || winner) return;
+        if (currentPlayer !== myMarker) return;
+        const index = parseInt(e.currentTarget.dataset.index, 10);
+        if (board[index] !== null) return;
+        if (!applyMove(index, myMarker)) return;
+        if (connection && connection.open) {
+            connection.send({ type: 'move', index, mark: myMarker });
         }
+    }
 
-        // ---------- PEER CONNECTION SETUP ----------
-        function initPeer() {
-            // Clean up any existing peer
-            if (peer) {
-                try { peer.destroy(); } catch (e) {}
-                peer = null;
-            }
+    // ============================================================
+    // PEER SETUP — with server fallback
+    // ============================================================
+    function initPeer() {
+        // cleanup
+        if (peer) { try { peer.destroy(); } catch(e){} peer = null; }
+        if (connectTimeout) { clearTimeout(connectTimeout); connectTimeout = null; }
 
-            setConnectionUI('connecting', 'Connecting to server...');
-            statusEl.textContent = 'Connecting to server...';
+        const server = PEER_SERVERS[serverIndex];
+        log(`Trying server ${serverIndex + 1}/${PEER_SERVERS.length}: ${server.host}`, 'warn');
+        setConnectionUI('connecting', `Connecting to ${server.host}...`);
+        statusEl.textContent = 'Connecting to signaling server...';
 
-            peer = new Peer(PEER_CONFIG);
-
-            peer.on('open', (id) => {
-                myPeerId = id;
-                myIdInput.value = id;
-                console.log('My peer ID:', id);
-                setConnectionUI('idle', 'Ready — share your ID');
-                statusEl.textContent = 'Ready! Share your ID or enter partner ID.';
-            });
-
-            peer.on('connection', (conn) => {
-                // Incoming connection (we are the host / X)
-                if (connection && connection.open) {
-                    conn.close(); // reject if already connected
-                    return;
+        try {
+            peer = new Peer({
+                host: server.host,
+                port: server.port,
+                secure: server.secure,
+                path: server.path,
+                key: server.key,
+                debug: 2,
+                config: {
+                    iceServers: [
+                        { urls: 'stun:stun.l.google.com:19302' },
+                        { urls: 'stun:stun1.l.google.com:19302' },
+                        { urls: 'stun:global.stun.twilio.com:3478' }
+                    ]
                 }
-                connection = conn;
-                setupConnection(conn, true);
             });
+        } catch (err) {
+            log(`Failed to construct Peer: ${err.message}`, 'error');
+            tryNextServer();
+            return;
+        }
 
-            peer.on('error', (err) => {
-                console.error('Peer error:', err);
-                if (err.type === 'peer-unavailable') {
-                    sta
+        // timeout — if no 'open' event within CONNECT_TIMEOUT, try next server
+        connectTimeout = setTimeout(() => {
+            if (!myPeerId) {
+                log(`Timeout after ${CONNECT_TIMEOUT/1000}s on ${server.host}`, 'error');
+                tryNextServer();
+            }
+        }, CONNECT_TIMEOUT);
+
+        peer.on('open', (id) => {
+            clearTimeout(connectTimeout);
+            connectTimeout = null;
+            myPeerId = id;
+            myIdInput.value = id;
+            log(`✅ Connected! My ID: ${id}`, 'ok');
+            setConnectionUI('ready', 'Ready — share your ID');
+            statusEl.textContent = '✅ Ready! Share your ID or enter partner ID.';
+        });
+
+        peer.on('connection', (conn) => {
+            if (connection && connection.open) {
+                log('Rejecting extra connection (already paired)', 'warn');
+                conn.close();
+                return;
+            }
+            log('📥 Incoming connection from peer', 'ok');
+            connection = conn;
+            setupConnection(conn, true);
+        });
+
+        peer.on('error', (err) => {
+            log(`Peer error (${err.type}): ${err.message}`, 'error');
+            if (err.type === 'peer-unavailable') {
+                statusEl.textContent = '❌ Partner ID not found. Double-check it.';
+                setConnectionUI('ready', 'Partner unavailable');
+                connecting = false;
+            } else if (err.type === 'unavailable-id') {
+                log('ID already taken, regenerating...', 'warn');
+                tryNextServer();
+            } else if (err.type === 'network' || err.type === 'server-error' || err.type === 'socket-error') {
+                tryNextServer();
+            }
+        });
+
+    
